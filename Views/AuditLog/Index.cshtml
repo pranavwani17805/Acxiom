@@ -1,0 +1,58 @@
+@model IEnumerable<AcxiomCRM.Web.Models.AuditLog>
+
+@{
+    ViewData["Title"] = "Audit Logs";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <h1>System Audit Logs</h1>
+        <span class="badge bg-secondary p-2">Showing Last 100 Logs</span>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search logs by action, entity, user, or details..." />
+                        <button type="submit" class="btn btn-outline-secondary">Search</button>
+                        @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                        {
+                            <a asp-action="Index" class="btn btn-outline-danger">Reset</a>
+                        }
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Timestamp (UTC)</th>
+                            <th>Action</th>
+                            <th>Entity</th>
+                            <th>User ID</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                            <tr>
+                                <td>@item.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td>
+                                    <span class="badge @(item.Action == "Create" ? "bg-success" : item.Action == "Update" ? "bg-warning text-dark" : item.Action == "Delete" ? "bg-danger" : "bg-info text-dark")">
+                                        @item.Action
+                                    </span>
+                                </td>
+                                <td class="fw-bold">@item.EntityName</td>
+                                <td class="small text-muted">@item.UserId</td>
+                                <td>@item.Details</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

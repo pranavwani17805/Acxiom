@@ -1,0 +1,65 @@
+@model IEnumerable<AcxiomCRM.Web.Models.Opportunity>
+
+@{
+    ViewData["Title"] = "Opportunities";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <h1>Sales Opportunities</h1>
+        <a asp-action="Create" class="btn btn-primary rounded-pill px-4">
+            <i class="bi bi-plus-lg"></i> New Opportunity
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search by deal name or customer..." />
+                        <button type="submit" class="btn btn-outline-secondary">Search</button>
+                        @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                        {
+                            <a asp-action="Index" class="btn btn-outline-danger">Reset</a>
+                        }
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Deal Name</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Stage</th>
+                            <th>Probability</th>
+                            <th>Closing Date</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                            <tr>
+                                <td class="fw-bold">@item.Name</td>
+                                <td>@(item.Customer?.CustomerName ?? "N/A")</td>
+                                <td class="text-success fw-bold">$@item.Amount.ToString("N2")</td>
+                                <td>
+                                    <span class="badge bg-primary">@item.Stage</span>
+                                </td>
+                                <td>@item.Probability%</td>
+                                <td>@item.ClosingDate.ToString("MMM dd, yyyy")</td>
+                                <td class="text-end">
+                                    <a asp-action="Edit" asp-route-id="@item.OpportunityId" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.OpportunityId" class="btn btn-sm btn-outline-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

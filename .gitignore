@@ -1,0 +1,18 @@
+# .NET / C# Build Outputs
+bin/
+obj/
+out/
+.vs/
+.vscode/
+.idea/
+
+# SQLite Local Database Files
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific & OS files
+.DS_Store
+*.user
+*.suo
+appsettings.Development.json
